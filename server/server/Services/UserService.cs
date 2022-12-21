@@ -18,11 +18,17 @@ public class UserService: IUserService
         _idGenerator = idGenerator;
     }
 
-    public async Task<List<User>> GetUsers()
+    public async Task<List<User>> GetUsers(bool include = false)
     {
         try
         {
-            return await _context.Users.ToListAsync();
+            var users = _context.Users;
+            if (include)
+            {
+                return await users.Include(u => u.ToDos).ToListAsync();
+            }
+
+            return await users.ToListAsync();
         }
         catch (Exception e)
         {
@@ -31,11 +37,17 @@ public class UserService: IUserService
         }
     }
 
-    public async Task<User> GetUser(long id)
+    public async Task<User> GetUser(long id, bool include = false)
     {
         try
         {
-            return await _context.Users.FindAsync(id);
+            var user = _context.Users.Where(u => u.Id == id);
+            if (include)
+            {
+                return await user.Include(u => u.ToDos).FirstAsync();
+            }
+
+            return await user.FirstAsync();
         }
         catch (Exception e)
         {
@@ -53,6 +65,26 @@ public class UserService: IUserService
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return await _context.Users.FindAsync(user.Id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return null;
+        }
+    }
+
+    public async Task<bool?> DeleteUser(long id)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user is null)
+            {
+                return false;
+            }
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
         catch (Exception e)
         {
