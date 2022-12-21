@@ -6,15 +6,18 @@ namespace server.Data;
 
 public class DataContext : DbContext
 {
+    
+    public DbSet<ToDo> ToDos { get; set; }
+    public DbSet<User> Users { get; set; }
+    
     public DataContext(DbContextOptions<DataContext> options): base(options)
     {
-        
     }
-
-    public DbSet<ToDo> ToDos { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        #region ToDoModelConfig
+
         modelBuilder.Entity<ToDo>()
             .Property(b => b.Id)
             .IsRequired()
@@ -34,5 +37,47 @@ public class DataContext : DbContext
             .Property(b => b.CreatedAt)
             .IsRequired()
             .HasDefaultValueSql("NOW()");
+
+        modelBuilder.Entity<ToDo>()
+            .Property(b => b.UserId)
+            .IsRequired();
+
+        #endregion
+
+        #region UserConfig
+
+        //Id
+        modelBuilder.Entity<User>()
+            .Property(b => b.Id)
+            .IsRequired()
+            .ValueGeneratedNever();
+
+        //Username
+        modelBuilder.Entity<User>()
+            .Property(b => b.Username)
+            .IsRequired()
+            .HasMaxLength(22);
+
+        modelBuilder.Entity<User>()
+            .HasIndex(b => b.Username)
+            .IsUnique();
+
+        //Password
+        modelBuilder.Entity<User>()
+            .Property(b => b.Password)
+            .IsRequired();
+
+        //Email
+        modelBuilder.Entity<User>()
+            .Property(b => b.Email)
+            .IsRequired()
+            .HasMaxLength(320);
+
+        modelBuilder.Entity<User>()
+            .HasIndex(b => b.Email)
+            .IsUnique();
+
+        #endregion
+
     }
 }

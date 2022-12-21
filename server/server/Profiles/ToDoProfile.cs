@@ -8,5 +8,6 @@ public class ToDoProfile: Profile
     public ToDoProfile()
     {
         CreateMap<ToDo, ToDoGetDto>();
+        CreateMap<ToDoAddDto, ToDo>();
     }
 }

@@ -5,8 +5,8 @@ using server.Services;
 
 namespace server.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class ToDoController : ControllerBase
 {
 
@@ -52,8 +52,9 @@ public class ToDoController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ToDoGetDto>> AddToDo(ToDoAddDto toDoReq)
     {
-        var toDo = await _toDoService.AddToDo(toDoReq);
-        if (toDo is null)
+        var toDo = _mapper.Map<ToDo>(toDoReq);
+        var toDoRes = await _toDoService.AddToDo(toDo);
+        if (toDoRes is null)
         {
             return Problem($"{toDoReq.Name} could not be added");
         }

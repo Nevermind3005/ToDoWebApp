@@ -2,27 +2,27 @@ using IdGen;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Models;
+using BC = BCrypt.Net.BCrypt;
 
 namespace server.Services;
 
-public class ToDoService: IToDoService
+public class UserService: IUserService
 {
 
     private readonly DataContext _context;
     private readonly IdGenerator _idGenerator;
 
-    public ToDoService(DataContext context, IdGenerator idGenerator)
+    public UserService(DataContext context, IdGenerator idGenerator)
     {
         _context = context;
         _idGenerator = idGenerator;
     }
 
-
-    public async Task<List<ToDo>> GetToDos()
+    public async Task<List<User>> GetUsers()
     {
         try
         {
-            return await _context.ToDos.ToListAsync();
+            return await _context.Users.ToListAsync();
         }
         catch (Exception e)
         {
@@ -31,11 +31,11 @@ public class ToDoService: IToDoService
         }
     }
 
-    public async Task<ToDo> GetToDo(long id)
+    public async Task<User> GetUser(long id)
     {
         try
         {
-            return await _context.ToDos.FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
         catch (Exception e)
         {
@@ -44,20 +44,20 @@ public class ToDoService: IToDoService
         }
     }
 
-    public async Task<ToDo> AddToDo(ToDo toDo)
+    public async Task<User> AddUser(User user)
     {
         try
         {
-            toDo.Id = _idGenerator.CreateId();
-            await _context.ToDos.AddAsync(toDo);
+            user.Password = BC.HashPassword(user.Password);
+            user.Id = _idGenerator.CreateId();
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            return await _context.ToDos.FindAsync(toDo.Id);
+            return await _context.Users.FindAsync(user.Id);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             return null;
         }
-        
     }
 }

@@ -17,6 +17,7 @@ var structure = new IdStructure(45, 2, 16);
 builder.Services.AddIdGen(0, () => new IdGeneratorOptions( structure, new DefaultTimeSource(epoch)));
 
 builder.Services.AddTransient<IToDoService, ToDoService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();

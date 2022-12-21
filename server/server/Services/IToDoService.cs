@@ -6,5 +6,5 @@ public interface IToDoService
 {
     Task<List<ToDo>> GetToDos();
     Task<ToDo> GetToDo(long id);
-    Task<ToDo> AddToDo(ToDoAddDto toDoDto);
+    Task<ToDo> AddToDo(ToDo toDo);
 }
