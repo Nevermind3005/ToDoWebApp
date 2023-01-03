@@ -18,6 +18,7 @@ builder.Services.AddIdGen(0, () => new IdGeneratorOptions( structure, new Defaul
 
 builder.Services.AddTransient<IToDoService, ToDoService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IJWTService, JWTService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();

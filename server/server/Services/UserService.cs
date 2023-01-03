@@ -56,6 +56,20 @@ public class UserService: IUserService
         }
     }
 
+    public async Task<User> GetUser(string username)
+    {
+        try
+        {
+            var user = await _context.Users.Where(u => u.Username == username).FirstAsync();
+            return user;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return null;
+        }
+    }
+
     public async Task<User> AddUser(User user)
     {
         try
