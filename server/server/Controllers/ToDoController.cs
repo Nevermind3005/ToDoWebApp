@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
 using server.Services;
@@ -19,7 +20,7 @@ public class ToDoController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<ActionResult<List<ToDoGetDto>>> GetTodos()
     {
         var todos = await _toDoService.GetToDos();

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace server.Models;
 
-public class UserLoginDto
+public class UserRegisterDto
 {
     [Required]
     [MinLength(3)]
@@ -12,4 +12,8 @@ public class UserLoginDto
     [MinLength(8)]
     [MaxLength(64)]
     public string Password { get; set; }
+    [Required]
+    [EmailAddress]
+    [MaxLength(320)]
+    public string Email { get; set; }
 }

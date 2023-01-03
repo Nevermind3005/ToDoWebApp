@@ -7,6 +7,13 @@ namespace server.Services;
 
 public class JWTService : IJWTService
 {
+    private IConfiguration _configuration;
+    
+    public JWTService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     public string GenerateJWT(User user)
     {
         List<Claim> claims = new()
@@ -14,10 +21,10 @@ public class JWTService : IJWTService
             new Claim(ClaimTypes.Name, user.Username)
         };
 
-        var key = new SymmetricSecurityKey("67111C1E-BC12-40EF-948E-79A607E2F48F"u8.ToArray());
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:AccessSecret").Value));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
+        
         var token = new JwtSecurityToken(
             claims: claims,
             expires: DateTime.Now.AddDays(7),
