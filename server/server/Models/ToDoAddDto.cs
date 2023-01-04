@@ -12,5 +12,4 @@ public class ToDoAddDto
     [MinLength(1)]
     [MaxLength(255)]
     public string Description { get; set; }
-    public long UserId { get; set; }
 }

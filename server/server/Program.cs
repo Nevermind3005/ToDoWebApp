@@ -19,6 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 var epoch = new DateTime(2020, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 var structure = new IdStructure(45, 2, 16);
 builder.Services.AddIdGen(0, () => new IdGeneratorOptions( structure, new DefaultTimeSource(epoch)));
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<IToDoService, ToDoService>();
 builder.Services.AddTransient<IUserService, UserService>();

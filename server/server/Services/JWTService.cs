@@ -18,7 +18,8 @@ public class JWTService : IJWTService
     {
         List<Claim> claims = new()
         {
-            new Claim(ClaimTypes.Name, user.Username)
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Sid, user.Id.ToString())
         };
 
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:AccessSecret").Value));

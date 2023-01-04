@@ -31,6 +31,19 @@ public class ToDoService: IToDoService
         }
     }
 
+    public async Task<List<ToDo>> GetToDosByUser(long id)
+    {
+        try
+        {
+            return await _context.ToDos.Where(t => t.UserId == id).ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw null;
+        }
+    }
+
     public async Task<ToDo> GetToDo(long id)
     {
         try

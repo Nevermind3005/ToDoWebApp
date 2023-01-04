@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using IdGen;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
@@ -11,11 +12,13 @@ public class UserService: IUserService
 
     private readonly DataContext _context;
     private readonly IdGenerator _idGenerator;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(DataContext context, IdGenerator idGenerator)
+    public UserService(DataContext context, IdGenerator idGenerator, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _idGenerator = idGenerator;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<List<User>> GetUsers(bool include = false)
@@ -56,7 +59,7 @@ public class UserService: IUserService
         }
     }
 
-    public async Task<User> GetUser(string username)
+    public async Task<User> GetUser(string username, bool include = false)
     {
         try
         {
@@ -68,6 +71,18 @@ public class UserService: IUserService
             Console.WriteLine(e);
             return null;
         }
+    }
+
+    public long? GetUserId()
+    {
+        if (_httpContextAccessor.HttpContext == null)
+        {
+            return null;
+        }
+
+        var id = long.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid));
+        
+        return id;
     }
 
     public async Task<User> AddUser(User user)

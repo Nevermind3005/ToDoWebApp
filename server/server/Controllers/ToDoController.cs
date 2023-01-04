@@ -12,26 +12,35 @@ public class ToDoController : ControllerBase
 {
 
     private readonly IToDoService _toDoService;
+    private readonly IUserService _userService;
     private readonly IMapper _mapper;
 
-    public ToDoController(IToDoService toDoService, IMapper mapper)
+    public ToDoController(IToDoService toDoService, IMapper mapper, IUserService userService)
     {
         _toDoService = toDoService;
         _mapper = mapper;
+        _userService = userService;
     }
 
     [HttpGet, Authorize]
     public async Task<ActionResult<List<ToDoGetDto>>> GetTodos()
     {
-        var todos = await _toDoService.GetToDos();
+        var userId = _userService.GetUserId();
 
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+        
+        var todos = await _toDoService.GetToDosByUser(userId.Value);
+    
         if (todos is null)
         {
             return NotFound();
         }
-
+    
         var toDoDto = _mapper.Map<List<ToDoGetDto>>(todos);
-
+    
         return Ok(toDoDto);
     }
 
@@ -50,10 +59,18 @@ public class ToDoController : ControllerBase
         return Ok(toDoDto);
     }
 
-    [HttpPost]
+    [HttpPost, Authorize]
     public async Task<ActionResult<ToDoGetDto>> AddToDo(ToDoAddDto toDoReq)
     {
+        var userId = _userService.GetUserId();
+        
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+        
         var toDo = _mapper.Map<ToDo>(toDoReq);
+        toDo.UserId = userId.Value;
         var toDoRes = await _toDoService.AddToDo(toDo);
         if (toDoRes is null)
         {

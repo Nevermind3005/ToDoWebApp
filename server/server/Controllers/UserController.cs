@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
 using server.Services;
@@ -34,10 +35,26 @@ public class UserController : ControllerBase
         return Ok(usersRes);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<UserGetDto>> GetUser(long id, bool include)
+    [HttpGet("me"), Authorize]
+    public async Task<ActionResult<UserGetDto>> GetUserMe()
     {
-        var user = await _userService.GetUser(id, include);
+        var id = _userService.GetUserId();
+        if (id == null)
+        {
+            return Unauthorized();
+        }
+
+        var user = await _userService.GetUser(id.Value);
+
+        var userRes = _mapper.Map<UserGetDto>(user);
+        
+        return userRes;
+    }
+
+    [HttpGet("{username}")]
+    public async Task<ActionResult<UserGetDto>> GetUser(string username, bool include)
+    {
+        var user = await _userService.GetUser(username, include);
 
         if (user is null)
         {
