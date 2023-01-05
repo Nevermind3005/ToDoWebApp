@@ -17,7 +17,6 @@ const Login = () => {
             },
             body: JSON.stringify(userLoginData),
         });
-        console.log(response);
         return response;
     };
 
@@ -27,7 +26,6 @@ const Login = () => {
 
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(userLoginData);
         const response = await login();
         setAccessToken(await response.text());
         if (response.status === 200) {

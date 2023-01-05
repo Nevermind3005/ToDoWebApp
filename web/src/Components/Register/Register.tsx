@@ -4,7 +4,7 @@ import { Button, Card, Form, Stack } from 'react-bootstrap';
 import { baseUrl, endpoints } from '../../api';
 
 const Register = () => {
-    const [userRegisterInfo, setUserRegisterInfo] = useState({
+    const [userRegisterData, setUserRegisterData] = useState({
         username: '',
         email: '',
         password: '',
@@ -16,14 +16,14 @@ const Register = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(userRegisterInfo),
+            body: JSON.stringify(userRegisterData),
         });
         return response;
     };
 
     const handleFormChange = (e: any) => {
-        setUserRegisterInfo({
-            ...userRegisterInfo,
+        setUserRegisterData({
+            ...userRegisterData,
             [e.target.name]: e.target.value,
         });
     };
@@ -32,10 +32,9 @@ const Register = () => {
         e: React.FormEvent<HTMLFormElement>
     ) => {
         e.preventDefault();
-        console.log(userRegisterInfo);
         const response = await register();
         if (response.status === 200) {
-            setUserRegisterInfo({
+            setUserRegisterData({
                 username: '',
                 email: '',
                 password: '',
@@ -57,7 +56,7 @@ const Register = () => {
                                 name='username'
                                 required
                                 onChange={(e) => handleFormChange(e)}
-                                value={userRegisterInfo.username}
+                                value={userRegisterData.username}
                             ></Form.Control>
                         </Form.Group>
                         <Form.Group>
@@ -68,7 +67,7 @@ const Register = () => {
                                 placeholder='Your email'
                                 required
                                 onChange={(e) => handleFormChange(e)}
-                                value={userRegisterInfo.email}
+                                value={userRegisterData.email}
                             ></Form.Control>
                         </Form.Group>
                         <Form.Group>
@@ -79,7 +78,7 @@ const Register = () => {
                                 placeholder='Password'
                                 required
                                 onChange={(e) => handleFormChange(e)}
-                                value={userRegisterInfo.password}
+                                value={userRegisterData.password}
                             ></Form.Control>
                         </Form.Group>
                         <Button variant='primary' type='submit'>
