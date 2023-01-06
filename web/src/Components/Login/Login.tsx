@@ -48,6 +48,8 @@ const Login = () => {
                                 type='text'
                                 placeholder='Username'
                                 required
+                                minLength={3}
+                                maxLength={22}
                                 name='username'
                                 value={userLoginData.username}
                                 onChange={(e) => handleFormChange(e)}
@@ -59,6 +61,8 @@ const Login = () => {
                                 type='password'
                                 placeholder='Password'
                                 required
+                                minLength={8}
+                                maxLength={64}
                                 name='password'
                                 value={userLoginData.password}
                                 onChange={(e) => handleFormChange(e)}

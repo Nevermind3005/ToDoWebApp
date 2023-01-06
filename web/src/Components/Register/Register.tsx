@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
 
 const Register = () => {
@@ -9,6 +10,8 @@ const Register = () => {
         email: '',
         password: '',
     });
+
+    const navigate = useNavigate();
 
     const register = async () => {
         const response = await fetch(`${baseUrl}${endpoints.register}`, {
@@ -34,11 +37,7 @@ const Register = () => {
         e.preventDefault();
         const response = await register();
         if (response.status === 200) {
-            setUserRegisterData({
-                username: '',
-                email: '',
-                password: '',
-            });
+            navigate('/login');
         }
     };
 
@@ -55,6 +54,8 @@ const Register = () => {
                                 placeholder='Username'
                                 name='username'
                                 required
+                                minLength={3}
+                                maxLength={22}
                                 onChange={(e) => handleFormChange(e)}
                                 value={userRegisterData.username}
                             ></Form.Control>
@@ -77,6 +78,8 @@ const Register = () => {
                                 name='password'
                                 placeholder='Password'
                                 required
+                                minLength={8}
+                                maxLength={64}
                                 onChange={(e) => handleFormChange(e)}
                                 value={userRegisterData.password}
                             ></Form.Control>
