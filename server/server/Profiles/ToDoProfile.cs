@@ -9,5 +9,6 @@ public class ToDoProfile: Profile
     {
         CreateMap<ToDo, ToDoGetDto>();
         CreateMap<ToDoAddDto, ToDo>();
+        CreateMap<ToDoUpdateDto, ToDo>();
     }
 }

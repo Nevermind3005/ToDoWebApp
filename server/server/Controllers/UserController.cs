@@ -36,22 +36,27 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("me"), Authorize]
-    public async Task<ActionResult<UserGetDto>> GetUserMe()
+    public async Task<ActionResult<UserGetDto>> GetUserMe(bool include)
     {
         var id = _userService.GetUserId();
-        if (id == null)
+        if (id is null)
         {
             return Unauthorized();
         }
 
-        var user = await _userService.GetUser(id.Value);
+        var user = await _userService.GetUser(id.Value, include);
 
+        if (user is null)
+        {
+            return NotFound();
+        }
+        
         var userRes = _mapper.Map<UserGetDto>(user);
         
         return userRes;
     }
 
-    [HttpGet("{username}")]
+    [HttpGet("{username}"), Authorize]
     public async Task<ActionResult<UserGetDto>> GetUser(string username, bool include)
     {
         var user = await _userService.GetUser(username, include);
@@ -66,35 +71,24 @@ public class UserController : ControllerBase
         return Ok(userRes);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<User>> AddUser(UserAddDto userReq)
+    [HttpDelete, Authorize]
+    public async Task<ActionResult> DeleteUser()
     {
-        if (ModelState.IsValid)
+        var userId = _userService.GetUserId();
+
+        if (userId is null)
         {
-            var user = _mapper.Map<User>(userReq);
-            var userRes = await _userService.AddUser(user);
-            if (userRes is null)
-            {
-                return Problem();
-            }
-
-            return Ok(userRes);
+            return Unauthorized();
         }
-
-        return BadRequest(ModelState);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteUser(long id)
-    {
-        var success = await _userService.DeleteUser(id);
+        
+        var success = await _userService.DeleteUser(userId.Value);
 
         if (success is null)
         {
             return Problem();
         }
 
-        if (success == false)
+        if (success.Value == false)
         {
             return NotFound();
         }

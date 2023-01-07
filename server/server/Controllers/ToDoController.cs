@@ -44,7 +44,7 @@ public class ToDoController : ControllerBase
         return Ok(toDoDto);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), Authorize]
     public async Task<ActionResult<ToDoGetDto>> GetToDo(long id)
     {
         var toDo = await _toDoService.GetToDo(id);
@@ -52,6 +52,18 @@ public class ToDoController : ControllerBase
         if (toDo is null)
         {
             return NotFound();
+        }
+
+        var userId = _userService.GetUserId();
+
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+        
+        if (toDo.UserId != userId.Value)
+        {
+            return Unauthorized();
         }
 
         var toDoDto = _mapper.Map<ToDoGetDto>(toDo);
@@ -62,6 +74,11 @@ public class ToDoController : ControllerBase
     [HttpPost, Authorize]
     public async Task<ActionResult<ToDoGetDto>> AddToDo(ToDoAddDto toDoReq)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         var userId = _userService.GetUserId();
         
         if (userId is null)
@@ -80,6 +97,84 @@ public class ToDoController : ControllerBase
         var toDoDto = _mapper.Map<ToDoGetDto>(toDo);
 
         return Ok(toDoDto);
+    }
+
+    [HttpPut("{id}"), Authorize]
+    public async Task<ActionResult> UpdateToDo(long id, ToDoUpdateDto toDoUpdateDto)
+    {
+        //TOTO Refactor
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        var userId = _userService.GetUserId();
+
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+
+        var currentToDo = await _toDoService.GetToDo(id);
+
+        if (currentToDo is null)
+        {
+            return NotFound();
+        }
+
+        if (currentToDo.UserId != userId.Value)
+        {
+            return Forbid();
+        }
+
+        var toDo = _mapper.Map<ToDo>(toDoUpdateDto);
+
+        var success = await _toDoService.UpdateToDo(toDo, id);
+
+        if (success is null)
+        {
+            return Problem();
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}"), Authorize]
+    public async Task<ActionResult> DeleteToDo(long id)
+    {
+        //TOTO Refactor
+        var userId = _userService.GetUserId();
+
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+
+        var toDo = await _toDoService.GetToDo(id);
+
+        if (toDo is null)
+        {
+            return NotFound();
+        }
+        
+        if (toDo.UserId != userId)
+        {
+            return Forbid();
+        }
+
+        var success = await _toDoService.DeleteToDo(id);
+        
+        if (success is null)
+        {
+            return Problem();
+        }
+
+        if (success.Value == false)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 
 }
