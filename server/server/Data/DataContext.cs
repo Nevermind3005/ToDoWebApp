@@ -9,7 +9,8 @@ public class DataContext : DbContext
     
     public DbSet<ToDo> ToDos { get; set; }
     public DbSet<User> Users { get; set; }
-    
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
     public DataContext(DbContextOptions<DataContext> options): base(options)
     {
     }
@@ -76,6 +77,31 @@ public class DataContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(b => b.Email)
             .IsUnique();
+
+        #endregion
+
+        #region RefreshTokenConfig
+
+        modelBuilder.Entity<RefreshToken>()
+            .Property(b => b.Id)
+            .IsRequired()
+            .ValueGeneratedNever();
+
+        modelBuilder.Entity<RefreshToken>()
+            .Property(b => b.Token)
+            .IsRequired();
+
+        modelBuilder.Entity<RefreshToken>()
+            .Property(b => b.CreatedAt)
+            .IsRequired();
+
+        modelBuilder.Entity<RefreshToken>()
+            .Property(b => b.Expires)
+            .IsRequired();
+
+        modelBuilder.Entity<RefreshToken>()
+            .Property(b => b.UserId)
+            .IsRequired();
 
         #endregion
 

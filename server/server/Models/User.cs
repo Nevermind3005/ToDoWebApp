@@ -7,4 +7,5 @@ public class User
     public string Password { get; set; }
     public string Email { get; set; }
     public List<ToDo> ToDos { get; set; }
+    public List<RefreshToken> RefreshTokens { get; set; }
 }

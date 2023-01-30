@@ -43,6 +43,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IToDoService, ToDoService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IJWTService, JWTService>();
+builder.Services.AddTransient<IRefreshTokenService, RefreshTokenService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
