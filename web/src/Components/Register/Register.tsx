@@ -13,18 +13,10 @@ const Register = () => {
     });
 
     const navigate = useNavigate();
-    const fetchs = useFetch();
+    const { post } = useFetch();
 
     const register = async () => {
-        // const response = await fetch(`${baseUrl}${endpoints.register}`, {
-        //     method: 'post',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(userRegisterData),
-        // });
-
-        const response = await fetchs.post(baseUrl + endpoints.register, {
+        const response = await post(baseUrl + endpoints.register, {
             headers: {
                 'content-type': 'application/json',
             },

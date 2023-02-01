@@ -29,6 +29,7 @@ const useFetch = () => {
         init: RequestInit | undefined,
         retry: boolean = false
     ): Promise<Response> => {
+        setIsLoading(true);
         let response = await fetch(url, createRequestOptions(method, init));
         if (response.status === 401 && retry) {
             let token = await fetchData(

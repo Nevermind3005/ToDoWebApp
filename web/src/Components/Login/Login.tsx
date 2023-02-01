@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
 import { setAccessToken } from '../../AccessToken';
 import { baseUrl, endpoints } from '../../api';
+import { LoginContext } from '../../App';
 import { useFetch } from '../../useFetch';
 
 const Login = () => {
@@ -9,6 +10,8 @@ const Login = () => {
         username: '',
         password: '',
     });
+
+    const loginContext = useContext(LoginContext);
 
     const { post } = useFetch();
 
@@ -35,6 +38,7 @@ const Login = () => {
                 username: '',
                 password: '',
             });
+            loginContext?.setIsLoggedIn(true);
         }
     };
 
