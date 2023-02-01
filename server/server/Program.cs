@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 
@@ -37,7 +38,7 @@ builder.Services.AddControllers(options =>
 
 var epoch = new DateTime(2020, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 var structure = new IdStructure(45, 2, 16);
-builder.Services.AddIdGen(0, () => new IdGeneratorOptions( structure, new DefaultTimeSource(epoch)));
+builder.Services.AddIdGen(0, () => new IdGeneratorOptions(structure, new DefaultTimeSource(epoch)));
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<IToDoService, ToDoService>();
@@ -58,7 +59,7 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    
+
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

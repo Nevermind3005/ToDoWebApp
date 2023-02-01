@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
+import { useFetch } from '../../useFetch';
 
 const Register = () => {
     const [userRegisterData, setUserRegisterData] = useState({
@@ -12,15 +13,24 @@ const Register = () => {
     });
 
     const navigate = useNavigate();
+    const fetchs = useFetch();
 
     const register = async () => {
-        const response = await fetch(`${baseUrl}${endpoints.register}`, {
-            method: 'post',
+        // const response = await fetch(`${baseUrl}${endpoints.register}`, {
+        //     method: 'post',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(userRegisterData),
+        // });
+
+        const response = await fetchs.post(baseUrl + endpoints.register, {
             headers: {
-                'Content-Type': 'application/json',
+                'content-type': 'application/json',
             },
             body: JSON.stringify(userRegisterData),
         });
+
         return response;
     };
 

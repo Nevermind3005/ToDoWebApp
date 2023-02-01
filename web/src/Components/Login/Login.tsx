@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
 import { setAccessToken } from '../../AccessToken';
 import { baseUrl, endpoints } from '../../api';
+import { useFetch } from '../../useFetch';
 
 const Login = () => {
     const [userLoginData, setUserLoginData] = useState({
@@ -9,12 +10,11 @@ const Login = () => {
         password: '',
     });
 
+    const { post } = useFetch();
+
     const login = async () => {
-        const response = await fetch(`${baseUrl}${endpoints.login}`, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const response = await post(baseUrl + endpoints.login, {
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userLoginData),
         });
         return response;
@@ -27,7 +27,9 @@ const Login = () => {
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const response = await login();
-        setAccessToken(await response.text());
+        let text = await response.text();
+        console.log(text);
+        setAccessToken(text);
         if (response.status === 200) {
             setUserLoginData({
                 username: '',

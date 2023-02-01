@@ -1,51 +1,53 @@
+import { useState } from 'react';
 import { getAccessToken, setAccessToken } from './AccessToken';
 import { baseUrl, endpoints } from './api';
 
 const useFetch = () => {
+    const [isLoading, setIsLoading] = useState(true);
+
     const auth = () => {
         return 'Bearer ' + getAccessToken();
     };
 
-    const createRequestOptions = (method: string, body: string) => {
-        return {
-            method: method,
-            headers: {
-                Authorization: auth(),
-                'content-type': 'application/json',
-                body: body,
-            },
-        };
+    const createRequestOptions = (
+        method: string,
+        init: RequestInit | undefined
+    ): RequestInit | undefined => {
+        let request = init;
+        if (request != null) {
+            request.method = method;
+            request.credentials = 'include';
+            request.headers = new Headers(request.headers);
+            request.headers.set('Authorization', auth());
+        }
+        return request;
     };
 
-    const fetchData = (
+    const fetchData = async (
         url: string,
         method: string,
-        body: string,
+        init: RequestInit | undefined,
         retry: boolean = false
-    ): Response | null => {
-        fetch(url, createRequestOptions(method, body))
-            .then(async (response) => {
-                if (response.status === 401 && retry) {
-                    await refreshToken();
-                    return fetchData(url, method, body);
-                }
-                return response;
-            })
-            .catch((error) => console.error(error.message));
-        return null;
-    };
-
-    const refreshToken = async () => {
-        await fetch(baseUrl + endpoints.token, { method: 'post' })
-            .then((response) => response.text())
-            .then((data) => {
-                setAccessToken(data);
-            });
+    ): Promise<Response> => {
+        let response = await fetch(url, createRequestOptions(method, init));
+        if (response.status === 401 && retry) {
+            let token = await fetchData(
+                baseUrl + endpoints.token,
+                'POST',
+                init
+            );
+            setAccessToken(await token.text());
+            response = await fetchData(url, method, init);
+        } else if (response.status === 401) {
+            setAccessToken('');
+        }
+        setIsLoading(false);
+        return response;
     };
 
     const request = (method: string) => {
-        return (url: string, body: string = '') => {
-            let response = fetchData(url, method, body, true);
+        return (url: string, init?: RequestInit | undefined) => {
+            let response = fetchData(url, method, init, true);
             return response;
         };
     };
@@ -55,6 +57,9 @@ const useFetch = () => {
         post: request('POST'),
         put: request('PUT'),
         delete: request('DELETE'),
+        getIsLoading: () => {
+            return isLoading;
+        },
     };
 };
 

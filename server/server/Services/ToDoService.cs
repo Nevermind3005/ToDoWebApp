@@ -5,7 +5,7 @@ using server.Models;
 
 namespace server.Services;
 
-public class ToDoService: IToDoService
+public class ToDoService : IToDoService
 {
 
     private readonly DataContext _context;
@@ -40,7 +40,7 @@ public class ToDoService: IToDoService
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw null;
+            return null;
         }
     }
 
@@ -71,7 +71,7 @@ public class ToDoService: IToDoService
             Console.WriteLine(e);
             return null;
         }
-        
+
     }
 
     public async Task<bool?> DeleteToDo(long id)
