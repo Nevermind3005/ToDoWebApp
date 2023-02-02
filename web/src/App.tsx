@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { getAccessToken } from './AccessToken';
 import { baseUrl, endpoints } from './api';
 import { useFetch } from './useFetch';
 
@@ -16,22 +15,22 @@ function App() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            let response = await get(baseUrl + endpoints.user.me, {});
+            if (response.ok) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+        };
+        fetchData();
+    }, []);
+
     return (
         <LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
             <div className='App'>
                 <Outlet />
-                {!isLoggedIn ? (
-                    <div>
-                        <button onClick={() => alert(getAccessToken())}>
-                            Token
-                        </button>
-                        <button
-                            onClick={() => get(baseUrl + endpoints.user.me, {})}
-                        >
-                            Me
-                        </button>
-                    </div>
-                ) : null}
             </div>
         </LoginContext.Provider>
     );

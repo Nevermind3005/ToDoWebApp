@@ -6,6 +6,9 @@ const endpoints = {
     user: {
         me: '/api/User/me',
     },
+    todo: {
+        todos: '/api/ToDo',
+    },
 };
 
 export { baseUrl, endpoints };
