@@ -8,6 +8,7 @@ const endpoints = {
     },
     todo: {
         todos: '/api/ToDo',
+        addTodo: '/api/ToDo',
     },
 };
 

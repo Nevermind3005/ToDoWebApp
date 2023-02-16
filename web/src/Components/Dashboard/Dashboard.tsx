@@ -1,9 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { Stack } from 'react-bootstrap';
 import { baseUrl, endpoints } from '../../api';
 import { LoginContext } from '../../App';
 import { useFetch } from '../../useFetch';
 import Todo from '../ToDo/ToDo';
+import TodoAdd from '../ToDoAdd/ToDoAdd';
+import './Dashboard.css';
 
 const Dashboard = () => {
     const [toDos, setToDos] = useState<any[]>([]);
@@ -21,23 +23,29 @@ const Dashboard = () => {
                 loginContext?.setIsLoggedIn(true);
             }
             let responseJson = await response.json();
+
             setToDos(responseJson);
         };
         fetchData();
     }, []);
 
     return (
-        <Stack gap={3} direction='horizontal' className='m-5'>
-            {toDos != null &&
-                toDos.map((toDo) => (
-                    <Todo
-                        key={toDo.id}
-                        title={toDo.name}
-                        description={toDo.description}
-                        completed={toDo.completedAt}
-                    />
-                ))}
-        </Stack>
+        <Fragment>
+            <div className='dashboard_main_container'>
+                <div className='dashboard_container'>
+                    {toDos != null &&
+                        toDos.map((toDo) => (
+                            <Todo
+                                key={toDo.id}
+                                title={toDo.name}
+                                description={toDo.description}
+                                completed={toDo.completedAt}
+                            />
+                        ))}
+                </div>
+            </div>
+            <TodoAdd />
+        </Fragment>
     );
 };
 

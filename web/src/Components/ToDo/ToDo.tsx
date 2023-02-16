@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Badge, Card } from 'react-bootstrap';
 
 interface IToDo {
@@ -6,18 +7,20 @@ interface IToDo {
     completed: boolean;
 }
 
-const Todo: React.FC<IToDo> = ({ title, description, completed }) => {
+const Todo: React.FC<IToDo> = (toDoProp: IToDo) => {
+    const [toDo, setToDo] = useState<IToDo>(toDoProp);
+
     return (
-        <Card style={{ width: '35rem' }}>
+        <Card style={{ width: 'calc(calc(100% / (3)) - 10px)', margin: '5px' }}>
             <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>{description}</Card.Text>
-                {!completed && (
+                <Card.Title>{toDo.title}</Card.Title>
+                <Card.Text>{toDo.description}</Card.Text>
+                {!toDo.completed && (
                     <Badge pill bg='warning' text='dark'>
                         Uncompleted
                     </Badge>
                 )}
-                {completed && (
+                {toDo.completed && (
                     <Badge pill bg='success' text='dark'>
                         Completed
                     </Badge>

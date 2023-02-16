@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { setAccessToken } from '../../AccessToken';
 import { baseUrl, endpoints } from '../../api';
 import { LoginContext } from '../../App';
@@ -10,6 +11,8 @@ const Login = () => {
         username: '',
         password: '',
     });
+
+    const navigate = useNavigate();
 
     const loginContext = useContext(LoginContext);
 
@@ -39,6 +42,7 @@ const Login = () => {
                 password: '',
             });
             loginContext?.setIsLoggedIn(true);
+            navigate('/dashboard');
         }
     };
 
