@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, Stack, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
 import { useFetch } from '../../useFetch';
 
@@ -8,6 +9,8 @@ const TodoAdd = () => {
         name: '',
         description: '',
     });
+
+    const navigate = useNavigate();
 
     const { post } = useFetch();
 
@@ -34,6 +37,7 @@ const TodoAdd = () => {
         const response = await add();
         if (response.status == 200) {
             console.log('OK');
+            navigate('/dashboard');
         } else {
             console.log('ERROR');
         }
@@ -42,7 +46,7 @@ const TodoAdd = () => {
     return (
         <Card style={{ width: '35rem' }}>
             <Card.Body>
-                <Card.Title className='text-center'>Add new ToDO</Card.Title>
+                <Card.Title className='text-center'>Add new ToDo</Card.Title>
                 <Form onSubmit={(e) => handleSubmit(e)}>
                     <Stack gap={3}>
                         <Form.Group>

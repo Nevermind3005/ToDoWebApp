@@ -7,6 +7,8 @@ import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
 import LandingPage from './Components/LandingPage/LandingPage';
 import Dashboard from './Components/Dashboard/Dashboard';
+import TodoAdd from './Components/ToDoAdd/ToDoAdd';
+import './index.css';
 
 const router = createBrowserRouter([
     {
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard',
                 element: <Dashboard />,
+            },
+            {
+                path: '/add',
+                element: <TodoAdd />,
             },
         ],
     },

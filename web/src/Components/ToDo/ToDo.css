@@ -1,0 +1,14 @@
+.todo_delete_button:hover {
+    cursor: pointer;
+}
+
+.todo_bottom_badges {
+    display: flex;
+    justify-content: space-between;
+}
+
+.todo_coltroll_badges {
+    display: flex;
+    justify-content: space-between;
+    width: 45%;
+}

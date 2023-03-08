@@ -1,5 +1,6 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { Stack } from 'react-bootstrap';
+import { Link, Route, Routes } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
 import { LoginContext } from '../../App';
 import { useFetch } from '../../useFetch';
@@ -37,6 +38,7 @@ const Dashboard = () => {
                         toDos.map((toDo) => (
                             <Todo
                                 key={toDo.id}
+                                id={toDo.id}
                                 title={toDo.name}
                                 description={toDo.description}
                                 completed={toDo.completedAt}
@@ -44,7 +46,9 @@ const Dashboard = () => {
                         ))}
                 </div>
             </div>
-            <TodoAdd />
+            <Link to={'../add'} className={'dashboard_add_button'}>
+                +
+            </Link>
         </Fragment>
     );
 };

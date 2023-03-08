@@ -8,3 +8,24 @@
     flex-wrap: wrap;
     justify-content: flex-start;
 }
+
+.dashboard_add_button {
+    position: fixed;
+    bottom: 2.5%;
+    right: 2.5%;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 200%;
+    border: none;
+    background-color: #0d6efd;
+    text-align: center;
+    line-height: 45px;
+    text-decoration: none;
+    color: white;
+}
+
+.dashboard_add_button:hover {
+    color: white;
+    background-color: #0b5ed7;
+}
