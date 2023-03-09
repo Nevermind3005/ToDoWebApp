@@ -7,7 +7,9 @@ const endpoints = {
         me: '/api/User/me',
     },
     todo: {
+        todo: '/api/ToDo',
         todos: '/api/ToDo',
+        editTodo: '/api/ToDo',
         addTodo: '/api/ToDo',
         deleteTodo: '/api/ToDo',
     },

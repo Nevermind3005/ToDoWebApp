@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { setAccessToken } from '../../AccessToken';
@@ -26,7 +26,9 @@ const Login = () => {
         return response;
     };
 
-    const handleFormChange = (e: any) => {
+    const handleFormChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ): void => {
         setUserLoginData({ ...userLoginData, [e.target.name]: e.target.value });
     };
 

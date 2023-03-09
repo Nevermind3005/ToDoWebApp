@@ -9,6 +9,7 @@ import LandingPage from './Components/LandingPage/LandingPage';
 import Dashboard from './Components/Dashboard/Dashboard';
 import TodoAdd from './Components/ToDoAdd/ToDoAdd';
 import './index.css';
+import ToDoEdit from './Components/ToDoEdit/ToDoEdit';
 
 const router = createBrowserRouter([
     {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: '/add',
                 element: <TodoAdd />,
+            },
+            {
+                path: '/edit/:toDoId',
+                element: <ToDoEdit />,
             },
         ],
     },

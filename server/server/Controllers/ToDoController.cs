@@ -31,16 +31,16 @@ public class ToDoController : ControllerBase
         {
             return Unauthorized();
         }
-        
+
         var todos = await _toDoService.GetToDosByUser(userId.Value);
-    
+
         if (todos is null)
         {
             return NotFound();
         }
-    
+
         var toDoDto = _mapper.Map<List<ToDoGetDto>>(todos);
-    
+
         return Ok(toDoDto);
     }
 
@@ -60,7 +60,7 @@ public class ToDoController : ControllerBase
         {
             return Unauthorized();
         }
-        
+
         if (toDo.UserId != userId.Value)
         {
             return Unauthorized();
@@ -78,14 +78,14 @@ public class ToDoController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        
+
         var userId = _userService.GetUserId();
-        
+
         if (userId is null)
         {
             return Unauthorized();
         }
-        
+
         var toDo = _mapper.Map<ToDo>(toDoReq);
         toDo.UserId = userId.Value;
         var toDoRes = await _toDoService.AddToDo(toDo);
@@ -107,7 +107,7 @@ public class ToDoController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        
+
         var userId = _userService.GetUserId();
 
         if (userId is null)
@@ -156,14 +156,14 @@ public class ToDoController : ControllerBase
         {
             return NotFound();
         }
-        
+
         if (toDo.UserId != userId)
         {
             return Forbid();
         }
 
         var success = await _toDoService.DeleteToDo(id);
-        
+
         if (success is null)
         {
             return Problem();

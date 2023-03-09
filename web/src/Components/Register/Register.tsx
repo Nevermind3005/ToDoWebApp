@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { Button, Card, Form, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +26,9 @@ const Register = () => {
         return response;
     };
 
-    const handleFormChange = (e: any) => {
+    const handleFormChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ): void => {
         setUserRegisterData({
             ...userRegisterData,
             [e.target.name]: e.target.value,

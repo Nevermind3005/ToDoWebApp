@@ -1,11 +1,9 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
-import { Stack } from 'react-bootstrap';
 import { Link, Route, Routes } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
 import { LoginContext } from '../../App';
 import { useFetch } from '../../useFetch';
 import Todo from '../ToDo/ToDo';
-import TodoAdd from '../ToDoAdd/ToDoAdd';
 import './Dashboard.css';
 
 const Dashboard = () => {

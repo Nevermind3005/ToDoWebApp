@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Card, Stack, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
@@ -14,7 +14,9 @@ const TodoAdd = () => {
 
     const { post } = useFetch();
 
-    const handleFormChange = (e: any) => {
+    const handleFormChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ): void => {
         setNewTodo({
             ...newTodo,
             [e.target.name]: e.target.value,

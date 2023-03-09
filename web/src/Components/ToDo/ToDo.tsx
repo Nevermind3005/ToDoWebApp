@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Badge, Card, Button } from 'react-bootstrap';
+import { Badge, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { baseUrl, endpoints } from '../../api';
 import { useFetch } from '../../useFetch';
 import './ToDo.css';
@@ -16,6 +17,9 @@ const Todo: React.FC<IToDo> = (toDoProp: IToDo) => {
 
     const d = useFetch();
 
+    const navigate = useNavigate();
+
+    //TODO refresh when todo deleted
     const deleteToDo = () => {
         let a = window.confirm('Are you sure to remove this todo?');
         if (a === false) {
@@ -24,12 +28,16 @@ const Todo: React.FC<IToDo> = (toDoProp: IToDo) => {
         d.delete(baseUrl + endpoints.todo.deleteTodo + '/' + toDo.id, {});
     };
 
+    const editToDoRedirect = () => {
+        navigate('../edit/' + toDo.id);
+    };
+
     return (
         <Card
             style={{
                 width: 'calc(calc(100% / (3)) - 10px)',
                 margin: '5px',
-                minWidth: '250px',
+                minWidth: '300px',
             }}
         >
             <Card.Body>
@@ -52,6 +60,7 @@ const Todo: React.FC<IToDo> = (toDoProp: IToDo) => {
                             bg='primary'
                             text='dark'
                             className='todo_delete_button'
+                            onClick={editToDoRedirect}
                         >
                             <i className='bi bi-pen'></i>Edit
                         </Badge>
