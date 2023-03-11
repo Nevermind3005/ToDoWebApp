@@ -10,6 +10,8 @@ interface IToDo {
     title: string;
     description: string;
     completed: boolean;
+    setToDos: any;
+    toDos: any[];
 }
 
 const Todo: React.FC<IToDo> = (toDoProp: IToDo) => {
@@ -20,12 +22,20 @@ const Todo: React.FC<IToDo> = (toDoProp: IToDo) => {
     const navigate = useNavigate();
 
     //TODO refresh when todo deleted
-    const deleteToDo = () => {
+    const deleteToDo = async () => {
         let a = window.confirm('Are you sure to remove this todo?');
         if (a === false) {
             return;
         }
-        d.delete(baseUrl + endpoints.todo.deleteTodo + '/' + toDo.id, {});
+        let response = await d.delete(
+            baseUrl + endpoints.todo.deleteTodo + '/' + toDo.id,
+            {}
+        );
+        if (response.status === 204) {
+            toDoProp.setToDos(
+                [...toDoProp.toDos].filter((todo) => todo.id !== toDo.id)
+            );
+        }
     };
 
     const editToDoRedirect = () => {

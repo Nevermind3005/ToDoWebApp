@@ -40,6 +40,8 @@ const Dashboard = () => {
                                 title={toDo.name}
                                 description={toDo.description}
                                 completed={toDo.completedAt}
+                                setToDos={setToDos}
+                                toDos={toDos}
                             />
                         ))}
                 </div>
